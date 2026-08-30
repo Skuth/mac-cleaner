@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="1280" viewBox="0 0 1280 1280">
+  <defs>
+    <linearGradient id="bnr" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#312e81"/>
+      <stop offset="0.55" stop-color="#1e1b4b"/>
+      <stop offset="1" stop-color="#0f172a"/>
+    </linearGradient>
+    <radialGradient id="bglow" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#818cf8" stop-opacity="0.40"/>
+      <stop offset="1" stop-color="#818cf8" stop-opacity="0"/>
+    </radialGradient>
+    <clipPath id="faixa"><rect x="0" y="0" width="1280" height="440"/></clipPath>
+  </defs>
+  <g transform="translate(0 420)" clip-path="url(#faixa)">
+    <rect width="1280" height="440" fill="url(#bnr)"/>
+    <ellipse cx="220" cy="140" rx="520" ry="380" fill="url(#bglow)"/>
+    <g transform="translate(96 110) scale(0.2148)">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#818cf8"/>
+      <stop offset="0.45" stop-color="#6366f1"/>
+      <stop offset="1" stop-color="#4c1d95"/>
+    </linearGradient>
+    <linearGradient id="handle" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="1" stop-color="#cbd5e1"/>
+    </linearGradient>
+    <linearGradient id="straw" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fcd34d"/>
+      <stop offset="1" stop-color="#f59e0b"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.30"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="1024" height="1024" rx="224" fill="url(#bg)"/>
+  <circle cx="330" cy="250" r="470" fill="url(#glow)"/>
+
+  <g transform="translate(-24 -34) scale(0.94) translate(33 33) rotate(-32 512 512)">
+    <!-- cabo -->
+    <rect x="486" y="188" width="52" height="392" rx="26" fill="url(#handle)"/>
+    <!-- amarração -->
+    <rect x="440" y="546" width="144" height="62" rx="22" fill="#e2e8f0"/>
+    <!-- cerdas -->
+    <path d="M424 596 h176 l58 226 a26 26 0 0 1 -26 32 h-240 a26 26 0 0 1 -26 -32 z" fill="url(#straw)"/>
+    <g stroke="#b45309" stroke-opacity="0.42" stroke-width="13" stroke-linecap="round">
+      <path d="M470 634 l-32 200"/>
+      <path d="M512 634 l0 200"/>
+      <path d="M554 634 l32 200"/>
+    </g>
+  </g>
+
+  <!-- brilhos -->
+  <g fill="#ffffff">
+    <path d="M286 250 C286 322 316 352 388 352 C316 352 286 382 286 454 C286 382 256 352 184 352 C256 352 286 322 286 250 Z"/>
+    <path d="M754 404 C754 452 774 472 822 472 C774 472 754 492 754 540 C754 492 734 472 686 472 C734 472 754 452 754 404 Z" fill-opacity="0.9"/>
+    <path d="M236 636 C236 674 252 690 290 690 C252 690 236 706 236 744 C236 706 220 690 182 690 C220 690 236 674 236 636 Z" fill-opacity="0.7"/>
+  </g>
+</g>
+    <g font-family="Helvetica Neue, Helvetica, Arial, sans-serif" fill="#ffffff">
+      <text x="368" y="196" font-size="84" font-weight="700" letter-spacing="-2">Mac Cleaner</text>
+      <text x="372" y="248" font-size="27" fill="#c7d2fe">Acha e apaga o lixo de desenvolvimento que ocupa o seu disco.</text>
+    </g>
+    <g font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="22" font-weight="500">
+      <rect x="372" y="290" width="230" height="44" rx="22" fill="#ffffff" fill-opacity="0.10" stroke="#ffffff" stroke-opacity="0.20"/><text x="487" y="319" fill="#e0e7ff" text-anchor="middle">Simuladores iOS</text><rect x="618" y="290" width="96" height="44" rx="22" fill="#ffffff" fill-opacity="0.10" stroke="#ffffff" stroke-opacity="0.20"/><text x="666" y="319" fill="#e0e7ff" text-anchor="middle">Xcode</text><rect x="730" y="290" width="122" height="44" rx="22" fill="#ffffff" fill-opacity="0.10" stroke="#ffffff" stroke-opacity="0.20"/><text x="791" y="319" fill="#e0e7ff" text-anchor="middle">Android</text><rect x="868" y="290" width="190" height="44" rx="22" fill="#ffffff" fill-opacity="0.10" stroke="#ffffff" stroke-opacity="0.20"/><text x="964" y="319" fill="#e0e7ff" text-anchor="middle">node_modules</text><rect x="1074" y="290" width="109" height="44" rx="22" fill="#ffffff" fill-opacity="0.10" stroke="#ffffff" stroke-opacity="0.20"/><text x="1129" y="319" fill="#e0e7ff" text-anchor="middle">Docker</text>
+    </g>
+  </g>
+</svg>
