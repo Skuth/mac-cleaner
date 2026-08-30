@@ -45,3 +45,25 @@ jobs:
           tagName: v__VERSION__
           releaseName: Mac Cleaner v__VERSION__
           releaseDraft: false
+          # O aviso do Gatekeeper aparece na primeira abertura, então a saída
+          # dele mora aqui — na página de download, não num README à parte.
+          releaseBody: |
+            Binário universal: roda nativo em Apple Silicon e em Intel.
+
+            ### Na primeira abertura o macOS vai barrar
+
+            > A Apple não pôde verificar se o item "Mac Cleaner" está livre de algum malware...
+
+            O app não é notarizado pela Apple, e todo arquivo baixado vem com
+            o atributo `com.apple.quarantine`. Para liberar, escolha um:
+
+            **Ajustes do Sistema › Privacidade e Segurança** — role até o fim
+            e clique em **Abrir Mesmo Assim**. Uma vez por versão.
+
+            **Ou pelo terminal:**
+
+            ```sh
+            xattr -dr com.apple.quarantine "/Applications/Mac Cleaner.app"
+            ```
+
+            Detalhes e como assinar de verdade: [Instalando](https://github.com/Skuth/mac-cleaner#instalando).

@@ -8,6 +8,7 @@
   <img alt="React 19" src="https://img.shields.io/badge/React-19-61DAFB?style=flat-square&logo=react&logoColor=black">
   <img alt="Rust" src="https://img.shields.io/badge/Rust-stable-000000?style=flat-square&logo=rust&logoColor=white">
   <img alt="macOS" src="https://img.shields.io/badge/macOS-12%2B-000000?style=flat-square&logo=apple&logoColor=white">
+  <a href="../../releases/latest"><img alt="Download" src="https://img.shields.io/github/v/release/Skuth/mac-cleaner?style=flat-square&label=download&color=6366f1"></a>
 </p>
 
 ---
@@ -144,6 +145,95 @@ Usa `docker system df` pra medir e as subcomandos oficiais pra limpar.
 Alvo abaixo de 1 MB nem aparece — só polui a tela. Projetos são procurados em
 `~/Documents/code`, `~/Documents/projects`, `~/Developer`, `~/code`, `~/dev`,
 `~/projects` e `~/workspace`.
+
+## Instalando
+
+Baixe o `.dmg` em [Releases](../../releases), arraste pra Aplicativos. Na
+primeira abertura o macOS vai barrar:
+
+> A Apple não pôde verificar se o item "Mac Cleaner" está livre de algum
+> malware capaz de danificar o Mac ou comprometer sua privacidade.
+
+Isso **não** é o macOS tendo encontrado alguma coisa. É o contrário: ele não
+tem o que verificar. O app não é assinado com um Developer ID nem notarizado
+pela Apple, e todo arquivo baixado carrega o atributo
+`com.apple.quarantine` — sem notarização, o Gatekeeper recusa por padrão.
+
+Dá pra confirmar que é só isso:
+
+```sh
+$ codesign -dv "/Applications/Mac Cleaner.app"
+Signature=adhoc          # o que o linker põe, não é assinatura de verdade
+TeamIdentifier=not set
+```
+
+### Liberando
+
+Dois caminhos, escolha um.
+
+**Pela interface.** Tente abrir o app uma vez e deixe ser bloqueado. Vá em
+**Ajustes do Sistema › Privacidade e Segurança** e role até o fim: aparece
+"Mac Cleaner foi bloqueado" com o botão **Abrir Mesmo Assim**. Confirme com
+Touch ID. Só precisa fazer uma vez por versão instalada.
+
+> No macOS 15+ o velho truque de clicar com o botão direito e escolher "Abrir"
+> não funciona mais para app não notarizado. É pelos Ajustes mesmo.
+
+**Pelo terminal.** Remove a quarentena direto:
+
+```sh
+xattr -dr com.apple.quarantine "/Applications/Mac Cleaner.app"
+```
+
+Depois disso abre normal, com duplo clique.
+
+### Assinando de verdade (opcional)
+
+Pra ninguém nunca mais ver esse aviso, o app precisa ser assinado com um
+Developer ID e notarizado pela Apple. Requer conta no [Apple Developer
+Program](https://developer.apple.com/programs/) — 99 USD/ano.
+
+Tendo a conta:
+
+1. No [portal de certificados](https://developer.apple.com/account/resources/certificates),
+   crie um **Developer ID Application**. Baixe e instale no Acesso às Chaves.
+2. Exporte como `.p12` (com senha) e converta pra base64 numa linha só:
+   ```sh
+   base64 -i certificado.p12 | tr -d '\n' | pbcopy
+   ```
+3. Gere uma [senha de app](https://account.apple.com/account/manage) pro seu
+   Apple ID — a notarização não aceita a senha da conta.
+4. Em **Settings › Secrets and variables › Actions** do repo, crie:
+
+   | Secret | Valor |
+   |---|---|
+   | `APPLE_CERTIFICATE` | o base64 do passo 2 |
+   | `APPLE_CERTIFICATE_PASSWORD` | a senha do `.p12` |
+   | `APPLE_SIGNING_IDENTITY` | `Developer ID Application: Seu Nome (TEAMID)` |
+   | `APPLE_ID` | seu Apple ID |
+   | `APPLE_PASSWORD` | a senha de app do passo 3 |
+   | `APPLE_TEAM_ID` | o Team ID, 10 caracteres |
+
+5. No `.github/workflows/build.yml`, adicione ao `env` do step do
+   `tauri-action`:
+
+   ```yaml
+   APPLE_CERTIFICATE: ${{ secrets.APPLE_CERTIFICATE }}
+   APPLE_CERTIFICATE_PASSWORD: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}
+   APPLE_SIGNING_IDENTITY: ${{ secrets.APPLE_SIGNING_IDENTITY }}
+   APPLE_ID: ${{ secrets.APPLE_ID }}
+   APPLE_PASSWORD: ${{ secrets.APPLE_PASSWORD }}
+   APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+   ```
+
+**Só adicione esse bloco depois de criar os secrets.** O bundler decide
+assinar com `var_os("APPLE_CERTIFICATE")`, e secret inexistente no Actions
+vira string vazia — que conta como "existe". Com o bloco ligado e os secrets
+vazios, o build falha tentando importar um certificado que não está lá. Por
+isso ele não vem pronto no repo.
+
+Notarizar acrescenta uns 2-5 min ao build: o `.dmg` sobe pra Apple, espera o
+scan e recebe o carimbo.
 
 ## Segurança
 
