@@ -202,9 +202,8 @@ O workflow é **manual**, não roda em push. Em **Actions → Build → Run
 workflow**, na branch `master`.
 
 Roda `cargo test`, empacota um binário **universal** — arm64 e x86_64 no mesmo
-arquivo, nativo tanto em Apple Silicon quanto em Intel — e abre um release **em
-rascunho** com o `.dmg` anexado, na tag `v<versão>`. Publicar é você que
-decide.
+arquivo, nativo tanto em Apple Silicon quanto em Intel — e publica um release
+na tag `v<versão>` com o `.dmg` anexado, pronto pra baixar.
 
 Só macOS, de propósito: o catálogo mede com `du`, lê
 `df /System/Volumes/Data` e procura em `~/Library`. Em outro sistema o app
@@ -222,8 +221,10 @@ git commit -am "Chore: bump to $(node -p "require('./package.json').version")"
 git push
 ```
 
-Aí é rodar o workflow e publicar o rascunho. O `version` do `Cargo.toml` é a
-versão do crate Rust e não entra no bundle — pode ignorar.
+Aí é rodar o workflow. O `version` do `Cargo.toml` é a versão do crate Rust e
+não entra no bundle — pode ignorar.
+
+Rodar duas vezes na mesma versão falha: a tag já existe. Bumpe antes.
 
 ## Como está montado
 

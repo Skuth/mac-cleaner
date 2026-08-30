@@ -35,12 +35,13 @@ jobs:
         run: cargo test --manifest-path src-tauri/Cargo.toml
 
       # __VERSION__ vira a versão do app — que sai do package.json, via
-      # `version` do tauri.conf.json. Sai em rascunho: quem publica é você.
+      # `version` do tauri.conf.json. Publica direto: rodar o workflow já é o
+      # ato deliberado, rascunho só adicionaria um clique.
       - uses: tauri-apps/tauri-action@v0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          args: --target universal-apple-darwin
+          args: --target universal-apple-darwin --bundles dmg
           tagName: v__VERSION__
           releaseName: Mac Cleaner v__VERSION__
-          releaseDraft: true
+          releaseDraft: false
