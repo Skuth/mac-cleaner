@@ -1008,6 +1008,7 @@ mod tests {
     /// Smoke test: um Mac de desenvolvimento sempre tem algo pra limpar. Se
     /// isso zerar, algum caminho do catálogo quebrou e o app abre vazio.
     #[test]
+    #[cfg(target_os = "macos")]
     fn catalogo_encontra_alvos_nesta_maquina() {
         let specs = build();
         for s in &specs {
