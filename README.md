@@ -201,12 +201,29 @@ no catálogo, a regra de quem entra em "recomendados" e — o que importa — qu
 O workflow é **manual**, não roda em push. Em **Actions → Build → Run
 workflow**, na branch `master`.
 
-Roda `cargo test`, empacota um binário universal (Apple Silicon + Intel) e
-sobe o `.dmg` como artifact.
+Roda `cargo test`, empacota um binário **universal** — arm64 e x86_64 no mesmo
+arquivo, nativo tanto em Apple Silicon quanto em Intel — e abre um release **em
+rascunho** com o `.dmg` anexado, na tag `v<versão>`. Publicar é você que
+decide.
 
 Só macOS, de propósito: o catálogo mede com `du`, lê
 `df /System/Volumes/Data` e procura em `~/Library`. Em outro sistema o app
 abriria vazio.
+
+### Lançando uma versão
+
+A versão mora num lugar só: o `version` do `package.json`. O
+`tauri.conf.json` aponta pra lá (`"version": "../package.json"`), e o
+`__VERSION__` do workflow lê o mesmo valor pra montar tag e título.
+
+```sh
+npm version patch --no-git-tag-version   # ou minor / major
+git commit -am "Chore: bump to $(node -p "require('./package.json').version")"
+git push
+```
+
+Aí é rodar o workflow e publicar o rascunho. O `version` do `Cargo.toml` é a
+versão do crate Rust e não entra no bundle — pode ignorar.
 
 ## Como está montado
 
