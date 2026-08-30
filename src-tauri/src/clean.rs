@@ -206,10 +206,7 @@ mod tests {
         }
     }
 
-    // Estes dois pisam numa $HOME de macOS de verdade: caminho POSIX absoluto,
-    // `Library/` e `/Library/Developer`. Fora do macOS não há o que assertar.
     #[test]
-    #[cfg(target_os = "macos")]
     fn guard_aceita_alvo_legitimo() {
         let h = home();
         for bom in [
@@ -223,7 +220,6 @@ mod tests {
     }
 
     #[test]
-    #[cfg(target_os = "macos")]
     fn empty_preserva_o_diretorio() {
         let base = home().join("Library/Caches/mac-cleaner-test");
         let _ = fs::create_dir_all(base.join("sub/mais/fundo"));

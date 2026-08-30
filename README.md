@@ -201,20 +201,12 @@ no catálogo, a regra de quem entra em "recomendados" e — o que importa — qu
 O workflow é **manual**, não roda em push. Em **Actions → Build → Run
 workflow**, na branch `master`.
 
-Compila as três plataformas em paralelo, roda `cargo test` antes de empacotar
-e sobe os instaladores como artifacts:
+Roda `cargo test`, empacota um binário universal (Apple Silicon + Intel) e
+sobe o `.dmg` como artifact.
 
-| Plataforma | Runner | Saída |
-|---|---|---|
-| macOS (universal) | `macos-latest` | `.dmg`, `.app` |
-| Linux x86_64 | `ubuntu-22.04` | `.deb`, `.rpm`, `.AppImage` |
-| Windows x86_64 | `windows-latest` | `.msi`, `.exe` |
-
-> **Nota.** O código compila nas três, mas o catálogo é macOS: mede com `du`,
-> lê `df /System/Volumes/Data` e procura em `~/Library`. Os binários de Linux e
-> Windows abrem e não acham nada pra limpar. Estão lá porque a pipeline pede —
-> pra virarem úteis, `catalog.rs` precisa de um bloco `#[cfg(target_os)]` com
-> os caminhos de cada sistema.
+Só macOS, de propósito: o catálogo mede com `du`, lê
+`df /System/Volumes/Data` e procura em `~/Library`. Em outro sistema o app
+abriria vazio.
 
 ## Como está montado
 
