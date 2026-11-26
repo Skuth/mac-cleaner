@@ -24,6 +24,8 @@ pub fn run() {
         .invoke_handler(tauri::generate_handler![
             scan::scan,
             scan::disk_usage,
+            scan::full_disk_access,
+            scan::open_fda_settings,
             clean::clean,
             clean::reveal,
         ])

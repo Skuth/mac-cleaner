@@ -141,3 +141,16 @@ pub fn read_disk() -> Disk {
 pub fn reveal_path(p: &Path) {
     let _ = Command::new("open").arg("-R").arg(p).status();
 }
+
+#[tauri::command]
+pub fn full_disk_access() -> bool {
+    catalog::full_disk_access()
+}
+
+/// Abre direto no painel de Acesso Total ao Disco.
+#[tauri::command]
+pub fn open_fda_settings() {
+    let _ = Command::new("open")
+        .arg("x-apple.systempreferences:com.apple.preference.security?Privacy_AllFiles")
+        .status();
+}

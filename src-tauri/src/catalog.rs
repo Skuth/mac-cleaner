@@ -11,6 +11,13 @@ pub fn home() -> PathBuf {
     PathBuf::from(std::env::var("HOME").unwrap_or_else(|_| "/Users/nobody".into()))
 }
 
+/// Acesso Total ao Disco. Sem ele, tocar em ~/Documents ou no contêiner de
+/// outro app dispara prompt do TCC — e com `du` em paralelo, dispara em
+/// rajada. O TCC.db só abre com o acesso, e falhar aqui não gera prompt.
+pub fn full_disk_access() -> bool {
+    fs::File::open(home().join("Library/Application Support/com.apple.TCC/TCC.db")).is_ok()
+}
+
 /// Só interessa alvo que existe e não está vazio.
 fn live(p: &Path) -> bool {
     match fs::read_dir(p) {
@@ -36,6 +43,7 @@ fn name_of(p: &Path) -> String {
 /// Onde procurar projetos. Só os que existem de verdade.
 fn dev_roots() -> Vec<PathBuf> {
     let h = home();
+    let fda = full_disk_access();
     [
         "Documents/code",
         "Documents/projects",
@@ -46,6 +54,8 @@ fn dev_roots() -> Vec<PathBuf> {
         "workspace",
     ]
     .iter()
+    // Sem acesso, nem encosta em ~/Documents: o `is_dir` já pediria permissão.
+    .filter(|r| fda || !r.starts_with("Documents/"))
     .map(|r| h.join(r))
     .filter(|p| p.is_dir())
     .collect()
@@ -626,7 +636,7 @@ fn docker(specs: &mut Vec<Spec>) {
 
     // O Docker.raw não encolhe sozinho depois do prune, então vale mostrar.
     let raw = home().join("Library/Containers/com.docker.docker/Data/vms/0/data/Docker.raw");
-    if raw.is_file() {
+    if full_disk_access() && raw.is_file() {
         specs.push(Spec {
             id: "docker.raw".into(),
             group: G_DOCKER,
@@ -918,7 +928,7 @@ fn system(specs: &mut Vec<Spec>) {
 
     // WhatsApp: só a mídia baixada. O ChatStorage.sqlite e o login ficam.
     let wa = h.join("Library/Group Containers/group.net.whatsapp.WhatsApp.shared/Message/Media");
-    if live(&wa) {
+    if full_disk_access() && live(&wa) {
         specs.push(Spec {
             id: "sys.whatsapp".into(),
             group: G_SYS,

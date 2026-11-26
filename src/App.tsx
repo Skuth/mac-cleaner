@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
+import { invoke } from "@tauri-apps/api/core";
 import { listen } from "@tauri-apps/api/event";
-import { AlertTriangle, Check, Loader2, Sparkles, Trash2, X } from "lucide-react";
+import { AlertTriangle, Check, Loader2, ShieldAlert, Sparkles, Trash2, X } from "lucide-react";
 
 import {
   AlertDialog,
@@ -39,6 +40,12 @@ export default function App() {
   const freedNow = useStore((s) => s.freedNow);
   const theme = useStore((s) => s.theme);
   const [confirmando, setConfirmando] = useState(false);
+  const [semAcesso, setSemAcesso] = useState(false);
+
+  // O macOS só aplica a permissão nova depois de reabrir o app.
+  useEffect(() => {
+    invoke<boolean>("full_disk_access").then((ok) => setSemAcesso(!ok));
+  }, []);
 
   useEffect(() => {
     scan();
@@ -82,6 +89,23 @@ export default function App() {
         <DiskHeader />
 
         <main className="mx-auto max-w-5xl px-8 py-6">
+          {semAcesso && (
+            <div className="mb-6 flex flex-col gap-3 rounded-xl border border-amber-500/30 bg-amber-500/5 p-4 sm:flex-row sm:items-center">
+              <ShieldAlert className="size-5 shrink-0 text-amber-600 dark:text-amber-400" />
+              <div className="flex-1 text-sm">
+                <p className="font-medium">Scan parcial: sem Acesso Total ao Disco</p>
+                <p className="mt-0.5 text-xs text-muted-foreground">
+                  Projetos em ~/Documents, o disco do Docker e a mídia do WhatsApp ficaram de
+                  fora pra não encher a tela de pedidos de permissão. Libere o Mac Cleaner
+                  na lista e reabra o app.
+                </p>
+              </div>
+              <Button variant="secondary" onClick={() => invoke("open_fda_settings")}>
+                Abrir Ajustes
+              </Button>
+            </div>
+          )}
+
           {results && (
             <div className="mb-6 rounded-xl border border-emerald-500/30 bg-emerald-500/5 p-5">
               <div className="flex items-start gap-3">
